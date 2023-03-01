@@ -14,6 +14,8 @@ export function Counter() {
   const count = useSelector(selectCount);
   const dispatch = useDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
+  // useState ,它返回一个状态和一个修改状态的方法，状态需要通过这个方法来进行修改；并且该方法是一个异步操作
+  // useRef可以帮助我们拿到修改后的值
 
   const incrementValue = Number(incrementAmount) || 0;
 
