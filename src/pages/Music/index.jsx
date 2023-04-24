@@ -502,7 +502,7 @@ export default function MusicPlay() {
                     >
                       <div
                         style={{
-                          flex: 1,
+                          height:"523px",
                           background: "rgba(217, 217, 217, 0.6)",
                           marginBottom: "24px",
                           fontSize: "32px",
@@ -511,9 +511,10 @@ export default function MusicPlay() {
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
+                          overflow:"hidden"
                         }}
                       >
-                        <a>the photo of the game link</a>
+                        <img src={gameBg} width={"100%"} height={"100%"} alt="" />
                       </div>
                       <button
                         style={{
