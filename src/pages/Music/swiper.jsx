@@ -1,15 +1,15 @@
 /** @format */
 
 import React, { useState, useEffect } from "react";
-import { LeftOutlined, RightOutlined ,DownloadOutlined} from "@ant-design/icons";
+import { LeftOutlined, RightOutlined ,DownloadOutlined,CloseCircleOutlined} from "@ant-design/icons";
 const Carousel = (props) => {
-  const { images } = props;
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const { images ,handleCancel ,index} = props;
+  const [currentIndex, setCurrentIndex] = useState(index || 0 );
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentIndex((currentIndex + 1) % images.length);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, [currentIndex, images.length]);
 
@@ -20,6 +20,14 @@ const Carousel = (props) => {
   const handleNextClick = () => {
     setCurrentIndex((currentIndex + 1) % images.length);
   };
+
+  const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
   return (
     <div
@@ -34,7 +42,7 @@ const Carousel = (props) => {
         return (
           <img
             key={item.url}
-            src={item.url}
+            src={item.url || getBase64(item.originFileObj)}
             alt={`carousel-${index}`}
             style={{
               position: "absolute",
@@ -46,6 +54,7 @@ const Carousel = (props) => {
           />
         );
       })}
+      <CloseCircleOutlined  style={{ position: "absolute", top: "1%", right: "1%", color: "#FFF" ,fontSize:"32px"}} onClick={handleCancel} />
       <LeftOutlined
         style={{ position: "absolute", top: "50%", left: "2%", color: "#FFF" ,fontSize:"64px"}}
         onClick={handlePrevClick}
@@ -54,7 +63,7 @@ const Carousel = (props) => {
         style={{ position: "absolute", top: "50%", right: "2%", color: "#FFF",fontSize:"64px" }}
         onClick={handleNextClick}
       />
-      <DownloadOutlined style={{ position: "absolute", bottom: "2%", left: "50%", color: "#FFF",fontSize:"32px" }} />
+      <DownloadOutlined style={{ position: "absolute", bottom: "2%", left: "50%", color: "#FFF",fontSize:"32px",transform:"translateX(-50%)"}} />
     </div>
   );
 };

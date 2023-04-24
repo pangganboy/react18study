@@ -4,6 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 import "./index.scss";
 import "../../assets/iconfont/font_4033099_e0huu1oupqg/iconfont.css";
 import logo from "@/assets/logo.png";
+import photo3 from "@/assets/image/photo3.jpeg";
+import photo2 from "@/assets/image/photo2.webp";
+import photo1 from "@/assets/image/photo1.jpeg";
+import pexels from "@/assets/image/pexels-photo-3171815.webp";
+import gameBg from "@/assets/image/gameBg.jpg";
 import {
   Button,
   Form,
@@ -99,7 +104,7 @@ export default function MusicPlay() {
   const contentStyle = {
     margin: 0,
     color: "#fff",
-    height:"calc(100%)",
+    height: "calc(100%)",
     background: "#364d79",
   };
   const onChange = (currentSlide) => {
@@ -143,7 +148,10 @@ export default function MusicPlay() {
       url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     },
   ]);
-  const handleCancel = () => setPreviewOpen(false);
+  const forceUpdate = () => {
+    this.forceUpdate();
+  };
+  const handleCancel = () => setPreviewOpen(true);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -204,13 +212,39 @@ export default function MusicPlay() {
   const menuClick = ({ key }) => {
     console.log("菜单项点击", key);
   };
+
+  
+  // 动态设置背景图片
+  const [bgImage, setBgImage] = useState(photo3);
+
   const leftMenuClick = ({ item, index }) => {
     console.log("左侧菜单点击", item, index);
+    if(renderNav){
+      if(index == 0){
+        setBgImage(photo3);
+      }
+      if(index == 1){
+        setBgImage(photo1);
+      }
+      if(index == 2){
+        setBgImage(pexels);
+      }
+    }else{
+      if(index == 0){
+        setBgImage(photo2);
+      }
+      if(index == 1){
+        setBgImage(photo1);
+      }
+      if(index == 2){
+        setBgImage(pexels);
+      }
+    }
     setMenuIndex(index);
   };
 
   useEffect(() => {
-    if (document.body.clientWidth > 450) setRenderNav(true);
+    if (document.body.clientWidth > 450) {setRenderNav(true)}
     else setRenderNav(false);
   }, [document.body.clientWidth]);
   return (
@@ -239,7 +273,16 @@ export default function MusicPlay() {
           </div>
         )}
       </header>
-      <div className="main">
+      <div
+        className="main"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundRepeat:"no-repeat",
+          backgroundSize:"cover",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          backgroundBlendMode: "multiply",
+        }}
+      >
         {renderNav ? (
           <div style={{ height: "calc(100% - 160px)", width: "100%" }}>
             <Row style={{ width: "100%" }} justify="space-evenly">
@@ -490,7 +533,7 @@ export default function MusicPlay() {
                     </div>
                   </div>
                 ) : (
-                  <div style={{height:"100%"}}>
+                  <div style={{ height: "100%", paddingLeft: "24px" }}>
                     {previewOpen ? (
                       <Upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -502,9 +545,18 @@ export default function MusicPlay() {
                         {fileList.length >= 8 ? null : uploadButton}
                       </Upload>
                     ) : (
-                      <div style={{width:"100%",height:"100%",marginLeft:"24px"}}>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          marginLeft: "24px",
+                        }}
+                      >
                         {/* 轮播图片 */}
-                        <Carousel images={fileList}></Carousel>
+                        <Carousel
+                          images={fileList}
+                          handleCancel={handleCancel}
+                        ></Carousel>
                       </div>
                     )}
                   </div>
@@ -512,8 +564,14 @@ export default function MusicPlay() {
               </Col>
             </Row>
           </div>
-        ) : (
-          <div style={{ height: "calc(100%)", width: "100%" }}>
+        ) : menuIndex == 0 ? (
+          <div
+            style={{
+              height: "calc(100%)",
+              width: "100%",
+              padding: " 10px 16px",
+            }}
+          >
             <div>
               <Input placeholder="Search" size="large" />
             </div>
@@ -655,6 +713,92 @@ export default function MusicPlay() {
                 />
               </InfiniteScroll>
             </div>
+          </div>
+        ) : menuIndex == 1 ? (
+          <div
+            style={{
+              height: "calc(100%)",
+              width: "100%",
+              display: "flex",
+              padding: " 10px 16px",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+          >
+            <div
+              style={{
+                height: "80%",
+                color: "#000",
+                fontWeight: "700",
+                background: "rgba(255, 255, 255, 0.5)",
+                border: "none",
+                width: "100%",
+                fontSize: "36px",
+                display: "flex",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <img src={gameBg} style={{width:"100%",height:"100%"}} alt="" />
+            </div>
+            <div>
+              <button
+                style={{
+                  color: "#0A7777",
+                  background: "#FFFFFF",
+                  border: "none",
+                  width: "100%",
+                  height: "48px",
+                  borderRadius: "24px",
+                }}
+              >
+                Play game
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ height: "100%", width: "100%", padding: " 10px 10px" }}>
+            {previewOpen ? (
+              <div style={{width:"100%",height:"100%"}}>
+                <div style={{width:"100%",height:"35%",fontSize:"24px",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+                  <span>“Party name”</span>
+                </div>
+                <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleChange}
+              >
+                {fileList.length >= 8 ? null : uploadButton}
+              </Upload>
+              </div>
+            ) : (
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                {/* 轮播图片 */}
+                <div
+                  style={{
+                    height: "50%",
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Carousel
+                    images={fileList}
+                    handleCancel={handleCancel}
+                  ></Carousel>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -852,11 +996,11 @@ export default function MusicPlay() {
               >
                 <div>
                   <span
-                    style={{ fontSize: "28px" }}
+                    style={{ fontSize: "24px" }}
                     className={`iconfont ${item.icon}`}
                   ></span>
                 </div>
-                <div>{item.name}</div>
+                <div style={{ fontSize: "18px" }}>{item.name}</div>
               </div>
             );
           })}
